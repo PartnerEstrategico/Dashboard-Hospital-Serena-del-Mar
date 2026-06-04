@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Serena del Mar — Gestión de Citas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0E3D5C;
+    --teal: #02C9CC;
+    --green: #059669;
+    --red: #E05252;
+    --amber: #F59E0B;
+    --white: #FFFFFF;
+    --gray-lt: #F0F4F8;
+    --gray-md: #E5E7EB;
+    --gray-dk: #6B7280;
+    --text: #1F2937;
+    --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --card-shadow-lg: 0 4px 12px rgba(14,61,92,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: var(--navy);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .app-header-left { display: flex; align-items: center; gap: 16px; }
+  .app-logo { color: var(--teal); font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .app-sub { color: rgba(255,255,255,0.4); font-size: 11px; }
+  .app-header-right { display: flex; align-items: center; gap: 12px; }
+  .last-update { color: rgba(255,255,255,0.35); font-size: 10px; font-family: 'DM Mono', monospace; }
+
+  /* NAV TABS */
+  .nav-bar {
+    background: #0a2e47;
+    padding: 0 28px;
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-tab {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+    letter-spacing: 0.2px;
+  }
+  .nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  .nav-tab:hover:not(.active) { color: rgba(255,255,255,0.75); }
+
+  /* CONTENT */
+  .content {
+    background: var(--gray-lt);
+    min-height: calc(100vh - 104px);
+    padding: 20px 28px;
+  }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-label { font-size: 11px; color: var(--gray-dk); font-weight: 500; }
+  .filter-select {
+    background: var(--white);
+    border: 1px solid var(--gray-md);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+  }
+  .filter-select:focus { border-color: var(--teal); }
+  .filter-badge {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* KPI CARDS */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .kpi-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--teal);
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.04;
+    transform: translate(20px, -20px);
+  }
+  .kpi-label { font-size: 10px; color: var(--gray-dk); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; font-weight: 500; }
+  .kpi-value { font-size: 28px; font-weight: 600; line-height: 1; letter-spacing: -1px; }
+  .kpi-sub { font-size: 10px; color: var(--gray-dk); margin-top: 4px; }
+  .kpi-pct { font-size: 12px; font-weight: 600; margin-top: 2px; }
+
+  /* PANELS */
+  .panel-row { display: grid; gap: 12px; margin-bottom: 14px; }
+  .p2 { grid-template-columns: 1fr 1fr; }
+  .p3 { grid-template-columns: 3fr 2fr; }
+  .p32 { grid-template-columns: 1fr 1fr 1fr; }
+  .panel {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .panel-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gray-md);
+  }
+
+  /* CUPOS BOX */
+  .cupos-box {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--red);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 14px;
+  }
+  .cupos-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .cupos-title { font-size: 12px; font-weight: 600; color: var(--navy); }
+  .cupos-badge { background: var(--red); color: var(--white); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .cupos-sub { font-size: 11px; color: var(--gray-dk); margin-bottom: 12px; line-height: 1.6; }
+  .cupos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .cupo-chip {
+    background: #FFF1F2;
+    border: 1px solid #FECACA;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+  }
+  .cupo-chip.total { background: #F0FDF4; border-color: #BBF7D0; }
+  .cupo-esp { font-size: 9px; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+  .cupo-n { font-size: 18px; font-weight: 600; color: var(--red); line-height: 1; }
+  .cupo-chip.total .cupo-n { color: var(--green); }
+  .cupo-label { font-size: 8px; color: var(--gray-dk); margin-top: 1px; }
+  .cupos-action {
+    background: #FFF7ED;
+    border-radius: 6px;
+    padding: 8px 12px;
+    border-left: 3px solid var(--amber);
+    font-size: 11px;
+    color: #78350F;
+    line-height: 1.6;
+  }
+  .cupos-action strong { color: #92400E; }
+  .cupos-note { font-size: 9px; color: var(--gray-dk); margin-top: 6px; }
+
+  /* ALERT BOXES */
+  .alert { border-radius: 0 6px 6px 0; padding: 8px 10px; font-size: 10px; margin-top: 8px; line-height: 1.5; }
+  .alert-ok { background: #F0FDF4; border-left: 3px solid var(--green); color: #065F46; }
+  .alert-warn { background: #FFF7ED; border-left: 3px solid var(--amber); color: #92400E; }
+  .alert-info { background: #EFF6FF; border-left: 3px solid var(--navy); color: #1E40AF; }
+
+  /* BARS */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .bar-lbl { font-size: 10px; color: var(--text); min-width: 100px; }
+  .bar-bg { flex: 1; height: 6px; background: var(--gray-md); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+  .bar-val { font-size: 10px; font-weight: 600; min-width: 60px; text-align: right; color: var(--text); }
+
+  /* MINI BARS (duration) */
+  .dur-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 6px; }
+  .dur-col { text-align: center; }
+  .dur-bar-wrap { height: 40px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px; }
+  .dur-bar-inner { width: 70%; border-radius: 3px 3px 0 0; }
+  .dur-lbl { font-size: 9px; color: var(--gray-dk); }
+  .dur-val { font-size: 11px; font-weight: 600; color: var(--navy); }
+  .dur-pct { font-size: 9px; color: var(--gray-dk); }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .data-table th { background: var(--navy); color: var(--white); padding: 7px 10px; text-align: left; font-weight: 500; font-size: 10px; }
+  .data-table td { padding: 6px 10px; border-bottom: 1px solid #F3F4F6; color: var(--text); }
+  .data-table tr:hover td { background: #F9FAFB; }
+  .data-table tfoot td { background: var(--gray-lt); font-weight: 600; color: var(--navy); border-top: 1.5px solid var(--gray-md); }
+
+  /* BADGES */
+  .bdg { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: 600; }
+  .bdg-green { background: #D1FAE5; color: #065F46; }
+  .bdg-red { background: #FEE2E2; color: #991B1B; }
+  .bdg-amber { background: #FEF3C7; color: #92400E; }
+  .bdg-gray { background: #F3F4F6; color: #6B7280; }
+  .bdg-teal { background: #CCFBF1; color: #0F766E; }
+
+  /* RANK ITEMS */
+  .rank-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F3F4F6; }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num { width: 20px; height: 20px; border-radius: 50%; background: var(--red); color: var(--white); font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .rank-name { flex: 1; font-size: 10px; color: var(--text); }
+  .rank-val { font-size: 11px; font-weight: 600; color: var(--navy); min-width: 20px; text-align: right; }
+  .rank-pct { min-width: 50px; text-align: right; font-size: 9px; }
+  .rank-total { display: flex; align-items: center; gap: 8px; padding: 7px 0 2px; border-top: 1.5px solid var(--gray-md); margin-top: 3px; }
+  .rank-total-lbl { flex: 1; font-size: 10px; font-weight: 600; color: var(--navy); }
+  .rank-total-val { font-size: 12px; font-weight: 600; color: var(--navy); }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    gap: 16px;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--gray-md);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 12px; color: var(--gray-dk); }
+
+  /* DONUT */
+  .donut-wrap { display: flex; align-items: center; gap: 16px; margin-top: 6px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 7px; }
+  .dleg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text); }
+  .dleg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  /* FOOTER */
+  .app-footer {
+    background: var(--navy);
+    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-note { font-size: 10px; color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--gray-dk);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .p2, .p3, .p32 { grid-template-columns: 1fr; }
+    .cupos-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="app-header-left">
+    <div>
+      <div class="app-logo">Hospital Serena del Mar</div>
+      <div class="app-sub">Gestión y confirmación de citas · Cartagena</div>
+    </div>
+  </div>
+  <div class="app-header-right">
+    <div class="last-update" id="lastUpdate">Cargando datos...</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <div class="nav-tab active" onclick="showPage(0)">Resumen ejecutivo</div>
+  <div class="nav-tab" onclick="showPage(1)">Por profesional / especialidad</div>
+  <div class="nav-tab" onclick="showPage(2)">Fuentes y cobertura</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- LOADING -->
+  <div class="loading" id="loadingDiv">
+    <div class="spinner"></div>
+    <div class="loading-text">Conectando con Google Sheets...</div>
+  </div>
+
+  <!-- PAGE 0: RESUMEN EJECUTIVO -->
+  <div class="page" id="page0">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-label">Período:</div>
+        <select class="filter-select" id="dateFilter" onchange="onPeriodChange()">
+          <option value="all">Todos los datos</option>
+          <option value="today">Último día disponible</option>
+          <option value="week">Últimos 7 días</option>
+          <option value="month">Último mes</option>
+          <option value="specific">Fecha específica</option>
+          <option value="range">Rango personalizado</option>
+        </select>
+      </div>
+      <div class="filter-group" id="specificDateGroup" style="display:none">
+        <div class="filter-label">Fecha:</div>
+        <select class="filter-select" id="specificDate" onchange="applyFilters()">
+          <option value="">— Selecciona —</option>
+        </select>
+      </div>
+      <div class="filter-group" id="rangeGroup" style="display:none">
+        <div class="filter-label">Desde:</div>
+        <select class="filter-select" id="dateFrom" onchange="applyFilters()"></select>
+        <div class="filter-label" style="margin-left:6px">Hasta:</div>
+        <select class="filter-select" id="dateTo" onchange="applyFilters()"></select>
+      </div>
+      <div class="filter-badge" id="totalBadge">— citas</div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="section-title">Indicadores clave</div>
+    <div class="kpi-row">
+      <div class="kpi-card" style="border-left-color:var(--navy)">
+        <div class="kpi-label">Total gestionadas</div>
+        <div class="kpi-value" style="color:var(--navy)" id="kpiTotal">—</div>
+        <div class="kpi-sub">Citas del período</div>
+      </div>
+      <div class="kpi-card" style="border-left-color:var(--teal)">
+        <div class="kpi-label">Contactadas</div>
+        <div class="kpi-value" style="color:var(--teal)" id="kpiAnswer">—</div>
+        <div class="kpi-pct" style="color:var(--teal)" id="kpiAnswerPct">—</div>
+        <div class="kpi-sub">contact ratio</div>
+      </div>
+      <div class="kpi-card" style="border-left-color:var(--green); background:#F0FDF4">
+        <div class="kpi-label">Confirman asistencia</div>
+        <div class="kpi-value" style="color:var(--green)" id="kpiSi">—</div>
+        <div class="kpi-pct" style="color:var(--green)" id="kpiSiPct">—</div>
+        <div class="kpi-sub">de encuestados</div>
+      </div>
+      <div class="kpi-card" style="border-left-color:var(--red); background:#FFF1F2">
+        <div class="kpi-label">Pacientes que no asistirán</div>
+        <div class="kpi-value" style="color:var(--red)" id="kpiNo">—</div>
+        <div class="kpi-pct" style="color:var(--red)" id="kpiNoPct">—</div>
+        <div class="kpi-sub">cupos liberados</div>
+      </div>
+    </div>
+
+    <!-- CUPOS DISPONIBLES -->
+    <div class="cupos-box">
+      <div class="cupos-header">
+        <div class="cupos-title">Cupos disponibles para reasignación</div>
+        <div class="cupos-badge" id="cuposBadge">— cupos libres</div>
+      </div>
+      <div class="cupos-sub" id="cuposSub">Cargando...</div>
+      <div class="cupos-grid" id="cuposGrid"><!-- dynamic --></div>
+      <div class="cupos-action">
+        <strong>Acción sugerida:</strong> Contactar de inmediato a los pacientes en lista de espera para cada especialidad con cupos liberados. Priorizar las de mayor volumen. La gestión oportuna evita la subutilización de consultorios y mejora el indicador de ocupación del día.
+      </div>
+      <div class="cupos-note">* Detalle de profesional y horario disponibles en la hoja DETALLE del informe</div>
+    </div>
+
+    <!-- ENCUESTA + RESULTADO LLAMADA -->
+    <div class="panel-row p2">
+      <div class="panel">
+        <div class="panel-title">Resultado encuesta</div>
+        <div class="donut-wrap">
+          <svg viewBox="0 0 80 80" width="80" height="80" style="flex-shrink:0" id="donutSvg">
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#E5E7EB" stroke-width="14"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="var(--green)" stroke-width="14"
+              id="donutSi" stroke-dasharray="0 175.9" stroke-dashoffset="44"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="var(--red)" stroke-width="14"
+              id="donutNo" stroke-dasharray="0 175.9" stroke-dashoffset="44"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#D1D5DB" stroke-width="14"
+              id="donutIgn" stroke-dasharray="0 175.9" stroke-dashoffset="44"/>
+            <text x="40" y="37" text-anchor="middle" font-size="13" font-weight="600" fill="var(--green)" id="donutPct">—</text>
+            <text x="40" y="50" text-anchor="middle" font-size="8" fill="#9CA3AF">confirma</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="dleg-item"><div class="dleg-dot" style="background:var(--green)"></div>Asistirá — <strong id="legSi">—</strong></div>
+            <div class="dleg-item"><div class="dleg-dot" style="background:var(--red)"></div>No asistirá — <strong id="legNo">—</strong></div>
+            <div class="dleg-item"><div class="dleg-dot" style="background:#D1D5DB"></div>Ignoró encuesta — <strong id="legIgn">—</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="panel">
+          <div class="panel-title">Resultado de la llamada</div>
+          <div id="dispositionBars"><!-- dynamic --></div>
+        </div>
+        <div class="panel" style="padding:10px 14px">
+          <div class="panel-title" style="font-size:9px;color:var(--gray-dk)">Duración de llamadas (seg)</div>
+          <div class="dur-row" id="durRow"><!-- dynamic --></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1: POR PROFESIONAL / ESPECIALIDAD -->
+  <div class="page" id="page1">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-label">Especialidad:</div>
+        <select class="filter-select" id="espFilter" onchange="applyFilters()">
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Profesional:</div>
+        <select class="filter-select" id="profFilter" onchange="applyFilters()">
+          <option value="">Todos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel-row p2">
+      <div class="panel">
+        <div class="panel-title">Especialidades con más cancelaciones</div>
+        <div id="rankEsp"><!-- dynamic --></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Profesionales con más cancelaciones</div>
+        <div id="rankProf"><!-- dynamic --></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Detalle cancelaciones por especialidad — volumen vs tasa</div>
+      <table class="data-table" id="detailTable">
+        <thead>
+          <tr>
+            <th>Especialidad</th>
+            <th>Total citas</th>
+            <th>Cancelan</th>
+            <th>Tasa</th>
+            <th>Riesgo</th>
+          </tr>
+        </thead>
+        <tbody id="detailTableBody"><!-- dynamic --></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PAGE 2: FUENTES Y COBERTURA -->
+  <div class="page" id="page2">
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi-card" style="border-left-color:var(--navy)">
+        <div class="kpi-label">Con teléfono alterno</div>
+        <div class="kpi-value" style="color:var(--navy)" id="kpiAlt">—</div>
+        <div class="kpi-pct" style="color:var(--navy)" id="kpiAltPct">—</div>
+        <div class="kpi-sub">2do intento disponible</div>
+      </div>
+      <div class="kpi-card kalert" style="border-left-color:var(--amber);background:#FFFBEB">
+        <div class="kpi-label">Sin teléfono alterno</div>
+        <div class="kpi-value" style="color:var(--amber)" id="kpiNoAlt">—</div>
+        <div class="kpi-pct" style="color:var(--amber)" id="kpiNoAltPct">—</div>
+        <div class="kpi-sub">solo un número</div>
+      </div>
+      <div class="kpi-card" style="border-left-color:var(--green);background:#F0FDF4">
+        <div class="kpi-label">Cobertura teléfono principal</div>
+        <div class="kpi-value" style="color:var(--green)" id="kpiFijo">—</div>
+        <div class="kpi-sub">100% — todos tienen registrado</div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom:14px" id="alertAlt">Cargando...</div>
+
+    <div class="panel-row p2">
+      <div class="panel">
+        <div class="panel-title">Fuente de agendamiento</div>
+        <div id="fuenteBars"><!-- dynamic --></div>
+        <div class="alert alert-info" id="alertFuente" style="margin-top:10px">Cargando...</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Cobertura telefónica</div>
+        <div id="coberturaBars"><!-- dynamic --></div>
+        <div class="alert alert-warn" id="alertCobertura" style="margin-top:10px">Cargando...</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Cancelaciones según fuente de agendamiento</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Fuente</th><th>Total citas</th><th>Cancela</th><th>Tasa</th><th>Contexto</th></tr>
+        </thead>
+        <tbody id="fuenteTableBody"><!-- dynamic --></tbody>
+        <tfoot id="fuenteTableFoot"></tfoot>
+      </table>
+      <div class="alert alert-ok" id="alertFuenteTable" style="margin-top:8px">Cargando...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="app-footer">
+  <div class="footer-note" id="footerNote">Hospital Serena del Mar · Gestión de Citas 2026</div>
+  <div class="footer-note">Partner Estratégico</div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const SHEET_ID = '1OMUCeAl5SUGINr7IPbvLfD2k_G4ORQ_D5H7yZcKTUl0';
+const SHEET_NAME = 'HSM_Maestro_Completo_2026_3';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+let allData = [];
+let filteredData = [];
+let allDates = [];
+
+// ── LOAD DATA ───────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch(CSV_URL);
+    const text = await res.text();
+    allData = parseCSV(text);
+    allDates = [...new Set(allData.map(r => r.Fecha))].sort();
+
+    // Populate date selector
+    // Populate specific date
+    const sel = document.getElementById('specificDate');
+    allDates.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d; opt.textContent = formatDate(d);
+      sel.appendChild(opt);
+    });
+    if (allDates.length > 0) sel.value = allDates[allDates.length - 1];
+
+    // Populate range selects
+    const fromSel = document.getElementById('dateFrom');
+    const toSel = document.getElementById('dateTo');
+    allDates.forEach(d => {
+      const o1 = document.createElement('option'); o1.value = d; o1.textContent = formatDate(d); fromSel.appendChild(o1);
+      const o2 = document.createElement('option'); o2.value = d; o2.textContent = formatDate(d); toSel.appendChild(o2);
+    });
+    if (allDates.length > 0) {
+      fromSel.value = allDates[0];
+      toSel.value = allDates[allDates.length - 1];
+    }
+
+    // Populate specialty and professional filters
+    populateFilters();
+
+    document.getElementById('loadingDiv').style.display = 'none';
+    document.getElementById('page0').classList.add('active');
+
+    const lastDate = allDates[allDates.length - 1];
+    document.getElementById('lastUpdate').textContent = `Último dato: ${formatDate(lastDate)} · ${allData.length.toLocaleString()} registros`;
+    document.getElementById('footerNote').textContent = `Hospital Serena del Mar · ${allData.length.toLocaleString()} citas · ${allDates.length} días`;
+
+    applyFilters();
+  } catch(e) {
+    document.getElementById('loadingDiv').innerHTML = `
+      <div style="text-align:center;color:#E05252">
+        <div style="font-size:24px;margin-bottom:8px">⚠️</div>
+        <div style="font-size:13px;font-weight:500">Error al cargar datos</div>
+        <div style="font-size:11px;color:#6B7280;margin-top:4px">Verifica que el Google Sheet sea público</div>
+      </div>`;
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+  return lines.slice(1).map(line => {
+    const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|(?<=,)$|^(?=,))/g) || [];
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = (vals[i] || '').replace(/^"|"$/g, '').trim();
+    });
+    return obj;
+  });
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  const months = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${parseInt(day)} ${months[parseInt(m)]} ${y}`;
+}
+
+function populateFilters() {
+  const esps = [...new Set(allData.map(r => r.Especialidad).filter(Boolean))].sort();
+  const profs = [...new Set(allData.map(r => r.Profesional).filter(Boolean))].sort();
+  const espSel = document.getElementById('espFilter');
+  const profSel = document.getElementById('profFilter');
+  esps.forEach(e => { const o = document.createElement('option'); o.value = e; o.textContent = e; espSel.appendChild(o); });
+  profs.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; profSel.appendChild(o); });
+}
+
+// ── FILTERS ─────────────────────────────────────────────────────────────────
+function onPeriodChange() {
+  const v = document.getElementById('dateFilter').value;
+  document.getElementById('specificDateGroup').style.display = v === 'specific' ? 'flex' : 'none';
+  document.getElementById('rangeGroup').style.display = v === 'range' ? 'flex' : 'none';
+  applyFilters();
+}
+
+function applyFilters() {
+  const dateF = document.getElementById('dateFilter').value;
+  const specDate = document.getElementById('specificDate').value;
+  const dateFrom = document.getElementById('dateFrom')?.value || '';
+  const dateTo = document.getElementById('dateTo')?.value || '';
+  const espF = document.getElementById('espFilter')?.value || '';
+  const profF = document.getElementById('profFilter')?.value || '';
+
+  const lastDate = allDates[allDates.length - 1];
+
+  filteredData = allData.filter(r => {
+    let pass = true;
+    if (dateF === 'specific' && specDate) {
+      pass = r.Fecha === specDate;
+    } else if (dateF === 'range' && dateFrom && dateTo) {
+      pass = r.Fecha >= dateFrom && r.Fecha <= dateTo;
+    } else if (dateF === 'today') {
+      pass = r.Fecha === lastDate;
+    } else if (dateF === 'week') {
+      const d = new Date(lastDate); d.setDate(d.getDate() - 7);
+      pass = r.Fecha >= d.toISOString().split('T')[0];
+    } else if (dateF === 'month') {
+      const d = new Date(lastDate); d.setDate(d.getDate() - 30);
+      pass = r.Fecha >= d.toISOString().split('T')[0];
+    }
+    if (espF && r.Especialidad !== espF) pass = false;
+    if (profF && r.Profesional !== profF) pass = false;
+    return pass;
+  });
+
+  renderAll();
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function renderAll() {
+  const d = filteredData;
+  const total = d.length;
+
+  document.getElementById('totalBadge').textContent = `${total.toLocaleString()} citas`;
+
+  // KPIs
+  const answer = d.filter(r => r.disposition === 'ANSWER').length;
+  const si = d.filter(r => r['ans_Respuesta ¿Asistirá cita medica?'] === 'ASISTIRA A LA CITA').length;
+  const no = d.filter(r => r['ans_Respuesta ¿Asistirá cita medica?'] === 'SOLICITA CANCELAR LA CITA').length;
+  const ign = answer - si - no;
+  const answerPct = total > 0 ? (answer/total*100).toFixed(1) : 0;
+  const siPct = (si+no) > 0 ? (si/(si+no)*100).toFixed(1) : 0;
+  const noPct = (si+no) > 0 ? (no/(si+no)*100).toFixed(1) : 0;
+
+  document.getElementById('kpiTotal').textContent = total.toLocaleString();
+  document.getElementById('kpiAnswer').textContent = answer.toLocaleString();
+  document.getElementById('kpiAnswerPct').textContent = `${answerPct}%`;
+  document.getElementById('kpiSi').textContent = si.toLocaleString();
+  document.getElementById('kpiSiPct').textContent = `${siPct}%`;
+  document.getElementById('kpiNo').textContent = no.toLocaleString();
+  document.getElementById('kpiNoPct').textContent = `${noPct}%`;
+
+  // Cupos
+  renderCupos(d, no);
+
+  // Donut
+  renderDonut(si, no, ign);
+
+  // Dispositions
+  renderDispositions(d, total);
+
+  // Duration
+  renderDuration(d);
+
+  // Page 1
+  renderRankings(d);
+
+  // Page 2
+  renderCoverage(d, total);
+}
+
+function renderCupos(d, no) {
+  document.getElementById('cuposBadge').textContent = `${no} cupos libres`;
+  document.getElementById('cuposSub').innerHTML = `<strong>${no} pacientes</strong> confirmaron que no asistirán a su cita. Estos cupos quedaron liberados y pueden asignarse a pacientes en lista de espera antes del inicio de la jornada.`;
+
+  const cancelRows = d.filter(r => r['ans_Respuesta ¿Asistirá cita medica?'] === 'SOLICITA CANCELAR LA CITA');
+  const byEsp = {};
+  cancelRows.forEach(r => {
+    const e = r.Especialidad || 'Sin especificar';
+    byEsp[e] = (byEsp[e] || 0) + 1;
+  });
+  const sorted = Object.entries(byEsp).sort((a,b) => b[1]-a[1]);
+  const top7 = sorted.slice(0, 7);
+  const others = sorted.slice(7).reduce((s, [,v]) => s+v, 0);
+
+  let html = '';
+  top7.forEach(([esp, n]) => {
+    html += `<div class="cupo-chip"><div class="cupo-esp">${esp}</div><div class="cupo-n">${n}</div><div class="cupo-label">cupos</div></div>`;
+  });
+  if (others > 0) {
+    html += `<div class="cupo-chip"><div class="cupo-esp">Otras especialidades</div><div class="cupo-n">${others}</div><div class="cupo-label">cupos</div></div>`;
+  }
+  html += `<div class="cupo-chip total"><div class="cupo-esp">Total recuperable</div><div class="cupo-n">${no}</div><div class="cupo-label">cupos totales</div></div>`;
+  document.getElementById('cuposGrid').innerHTML = html;
+}
+
+function renderDonut(si, no, ign) {
+  const total = si + no + ign;
+  if (total === 0) return;
+  const circ = 175.9;
+  const siArc = (si/total) * circ;
+  const noArc = (no/total) * circ;
+  const ignArc = (ign/total) * circ;
+  const siPct = (si/(si+no)*100).toFixed(0);
+
+  document.getElementById('donutSi').setAttribute('stroke-dasharray', `${siArc} ${circ}`);
+  document.getElementById('donutSi').setAttribute('stroke-dashoffset', '44');
+
+  const noOffset = -(siArc - 44);
+  document.getElementById('donutNo').setAttribute('stroke-dasharray', `${noArc} ${circ}`);
+  document.getElementById('donutNo').setAttribute('stroke-dashoffset', `${noOffset}`);
+
+  const ignOffset = noOffset - noArc;
+  document.getElementById('donutIgn').setAttribute('stroke-dasharray', `${ignArc} ${circ}`);
+  document.getElementById('donutIgn').setAttribute('stroke-dashoffset', `${ignOffset}`);
+
+  document.getElementById('donutPct').textContent = `${siPct}%`;
+  document.getElementById('legSi').textContent = `${si.toLocaleString()} (${(si/(si+no)*100).toFixed(1)}%)`;
+  document.getElementById('legNo').textContent = `${no.toLocaleString()} (${(no/(si+no)*100).toFixed(1)}%)`;
+  document.getElementById('legIgn').textContent = ign.toLocaleString();
+}
+
+function renderDispositions(d, total) {
+  const labels = {'ANSWER':'Contestó','NO ANSWER':'No contestó','VOICEMAIL':'Buzón de voz','BUSY':'Línea ocupada','NO RING':'No timbró','INVALID':'Número inválido'};
+  const colors = {'ANSWER':'#0E3D5C','NO ANSWER':'#F59E0B','VOICEMAIL':'#A78BFA','BUSY':'#D1D5DB','NO RING':'#D1D5DB','INVALID':'#FCA5A5'};
+  const counts = {};
+  d.forEach(r => counts[r.disposition] = (counts[r.disposition]||0)+1);
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const maxVal = sorted[0]?.[1] || 1;
+
+  let html = '';
+  sorted.forEach(([disp, n]) => {
+    const pct = (n/total*100).toFixed(1);
+    const barW = (n/maxVal*100).toFixed(0);
+    html += `<div class="bar-row">
+      <div class="bar-lbl">${labels[disp]||disp}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${barW}%;background:${colors[disp]||'#ccc'}"></div></div>
+      <div class="bar-val">${n.toLocaleString()} · ${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('dispositionBars').innerHTML = html;
+}
+
+function renderDuration(d) {
+  const ranges = [
+    {label:'1–15 seg', min:1, max:15, color:'#02C9CC', opacity:.5},
+    {label:'16–30 seg', min:16, max:30, color:'#02C9CC', opacity:.7},
+    {label:'31–45 seg', min:31, max:45, color:'#0E3D5C', opacity:.85},
+    {label:'>45 seg', min:46, max:99999, color:'#0E3D5C', opacity:1},
+  ];
+  const answer = d.filter(r => r.disposition === 'ANSWER');
+  const total = answer.length || 1;
+  const counts = ranges.map(r => answer.filter(x => {const dur = parseInt(x.duration)||0; return dur >= r.min && dur <= r.max;}).length);
+  const maxC = Math.max(...counts) || 1;
+
+  let html = '';
+  ranges.forEach((r, i) => {
+    const h = Math.max(8, (counts[i]/maxC*36));
+    const pct = (counts[i]/total*100).toFixed(1);
+    html += `<div class="dur-col">
+      <div class="dur-val">${counts[i].toLocaleString()}</div>
+      <div class="dur-bar-wrap"><div class="dur-bar-inner" style="height:${h}px;background:${r.color};opacity:${r.opacity}"></div></div>
+      <div class="dur-lbl">${r.label}</div>
+      <div class="dur-pct">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('durRow').innerHTML = html;
+}
+
+function renderRankings(d) {
+  // Especialidades
+  const espCancel = {}, espTotal = {};
+  d.forEach(r => {
+    const e = r.Especialidad || 'Sin especificar';
+    espTotal[e] = (espTotal[e]||0)+1;
+    if (r['ans_Respuesta ¿Asistirá cita medica?'] === 'SOLICITA CANCELAR LA CITA') espCancel[e] = (espCancel[e]||0)+1;
+  });
+  const espSorted = Object.entries(espCancel).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  let espHtml = '';
+  espSorted.forEach(([esp, n], i) => {
+    const tasa = ((n/(espTotal[esp]||1))*100).toFixed(1);
+    const bdgClass = parseFloat(tasa) >= 25 ? 'bdg-red' : parseFloat(tasa) >= 10 ? 'bdg-amber' : 'bdg-gray';
+    espHtml += `<div class="rank-item">
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-name">${esp}</div>
+      <div class="rank-val">${n}</div>
+      <div class="rank-pct"><span class="bdg ${bdgClass}">${tasa}%</span></div>
+    </div>`;
+  });
+  const totalCancel = Object.values(espCancel).reduce((s,v)=>s+v,0);
+  const totalCitas = d.length;
+  espHtml += `<div class="rank-total"><div class="rank-total-lbl">Total cancelaciones</div><div class="rank-total-val">${totalCancel}</div><div style="font-size:9px;color:var(--gray-dk);min-width:60px;text-align:right">${(totalCancel/totalCitas*100).toFixed(1)}% base</div></div>`;
+  document.getElementById('rankEsp').innerHTML = espHtml;
+
+  // Profesionales
+  const profCancel = {}, profTotal = {};
+  d.forEach(r => {
+    const p = r.Profesional || 'Sin especificar';
+    profTotal[p] = (profTotal[p]||0)+1;
+    if (r['ans_Respuesta ¿Asistirá cita medica?'] === 'SOLICITA CANCELAR LA CITA') profCancel[p] = (profCancel[p]||0)+1;
+  });
+  const profSorted = Object.entries(profCancel).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  let profHtml = '';
+  profSorted.forEach(([prof, n], i) => {
+    const tasa = ((n/(profTotal[prof]||1))*100).toFixed(1);
+    const bdgClass = parseFloat(tasa) >= 25 ? 'bdg-red' : parseFloat(tasa) >= 10 ? 'bdg-amber' : 'bdg-gray';
+    profHtml += `<div class="rank-item">
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-name">${prof}</div>
+      <div class="rank-val">${n}</div>
+      <div class="rank-pct"><span class="bdg ${bdgClass}">${tasa}%</span></div>
+    </div>`;
+  });
+  profHtml += `<div class="rank-total"><div class="rank-total-lbl">Total cancelaciones</div><div class="rank-total-val">${totalCancel}</div><div style="font-size:9px;color:var(--gray-dk);min-width:60px;text-align:right">${(totalCancel/totalCitas*100).toFixed(1)}% base</div></div>`;
+  document.getElementById('rankProf').innerHTML = profHtml;
+
+  // Detail table
+  const allEsp = Object.keys(espTotal).filter(e => espCancel[e]);
+  const sorted = allEsp.sort((a,b)=>(espCancel[b]||0)-(espCancel[a]||0));
+  let tableHtml = '';
+  sorted.slice(0,15).forEach(esp => {
+    const n = espCancel[esp]||0;
+    const t = espTotal[esp]||1;
+    const tasa = (n/t*100).toFixed(1);
+    const risk = parseFloat(tasa)>=25?'<span class="bdg bdg-red">Crítico</span>':parseFloat(tasa)>=15?'<span class="bdg bdg-amber">Alto</span>':parseFloat(tasa)>=10?'<span class="bdg bdg-gray">Moderado</span>':'<span class="bdg bdg-green">Bajo</span>';
+    const tasaBdg = parseFloat(tasa)>=25?'bdg-red':parseFloat(tasa)>=15?'bdg-amber':parseFloat(tasa)>=10?'bdg-gray':'bdg-green';
+    tableHtml += `<tr><td>${esp}</td><td>${t.toLocaleString()}</td><td>${n}</td><td><span class="bdg ${tasaBdg}">${tasa}%</span></td><td>${risk}</td></tr>`;
+  });
+  document.getElementById('detailTableBody').innerHTML = tableHtml;
+}
+
+function renderCoverage(d, total) {
+  const alterno = d.filter(r => r.tiene_alterno === '1' || r.tiene_alterno === 1).length;
+  const sinAlt = total - alterno;
+  const altPct = (alterno/total*100).toFixed(1);
+  const sinAltPct = (sinAlt/total*100).toFixed(1);
+
+  document.getElementById('kpiAlt').textContent = alterno.toLocaleString();
+  document.getElementById('kpiAltPct').textContent = `${altPct}%`;
+  document.getElementById('kpiNoAlt').textContent = sinAlt.toLocaleString();
+  document.getElementById('kpiNoAltPct').textContent = `${sinAltPct}%`;
+  document.getElementById('kpiFijo').textContent = total.toLocaleString();
+
+  document.getElementById('alertAlt').innerHTML = `<strong>Oportunidad:</strong> ${sinAlt.toLocaleString()} pacientes (${sinAltPct}%) no tienen número alterno. Si no contestan el principal, no hay segundo intento posible. Incentivar el registro puede mejorar el contact ratio.`;
+
+  // Fuente bars
+  const fuentes = {};
+  d.forEach(r => { const f = r['Fuente de Agendamiento']||'Sin dato'; fuentes[f]=(fuentes[f]||0)+1; });
+  const fSorted = Object.entries(fuentes).sort((a,b)=>b[1]-a[1]);
+  const fColors = {'Funcionario':'#0E3D5C','Portal Paciente':'#02C9CC','Bot':'#F59E0B'};
+  let fHtml = '';
+  fSorted.forEach(([f,n]) => {
+    const pct = (n/total*100).toFixed(1);
+    fHtml += `<div class="bar-row">
+      <div class="bar-lbl">${f}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${fColors[f]||'#ccc'}"></div></div>
+      <div class="bar-val">${n.toLocaleString()} · ${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('fuenteBars').innerHTML = fHtml;
+
+  const portalPct = (fuentes['Portal Paciente']||0)/total*100;
+  document.getElementById('alertFuente').innerHTML = `El ${portalPct.toFixed(1)}% ya agenda por Portal Paciente de forma autónoma. Potencial de crecimiento digital.`;
+
+  // Cobertura bars
+  const noAnswer = d.filter(r=>r.disposition==='NO ANSWER').length;
+  const voicemail = d.filter(r=>r.disposition==='VOICEMAIL').length;
+  const cHtml = `
+    <div class="bar-row"><div class="bar-lbl">Con número alterno</div><div class="bar-bg"><div class="bar-fill" style="width:${altPct}%;background:var(--navy)"></div></div><div class="bar-val">${alterno.toLocaleString()} · ${altPct}%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Sin número alterno</div><div class="bar-bg"><div class="bar-fill" style="width:${sinAltPct}%;background:var(--amber)"></div></div><div class="bar-val">${sinAlt.toLocaleString()} · ${sinAltPct}%</div></div>
+    <div class="bar-row" style="margin-top:8px"><div class="bar-lbl">Teléfono principal</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green)"></div></div><div class="bar-val">${total.toLocaleString()} · 100%</div></div>`;
+  document.getElementById('coberturaBars').innerHTML = cHtml;
+  document.getElementById('alertCobertura').innerHTML = `<strong>Mejora posible:</strong> Con más números alternos, se podría reintentar las <strong>${noAnswer} llamadas que no contestaron</strong> y las <strong>${voicemail} que fueron a buzón de voz</strong> — un potencial de ${noAnswer+voicemail} contactos adicionales.`;
+
+  // Fuente table
+  const cancelByFuente = {};
+  d.filter(r=>r['ans_Respuesta ¿Asistirá cita medica?']==='SOLICITA CANCELAR LA CITA').forEach(r=>{
+    const f=r['Fuente de Agendamiento']||'Sin dato';
+    cancelByFuente[f]=(cancelByFuente[f]||0)+1;
+  });
+  const contextos = {'Funcionario':'Agendado por el equipo de call center','Portal Paciente':'Autoagendado por el paciente','Bot':'Volumen muy bajo'};
+  let tHtml = '';
+  let totalC = 0;
+  fSorted.forEach(([f,n]) => {
+    const c = cancelByFuente[f]||0;
+    totalC += c;
+    const tasa = (c/n*100).toFixed(1);
+    const bdg = c===0?'bdg-green':parseFloat(tasa)>=10?'bdg-amber':'bdg-gray';
+    tHtml += `<tr><td>${f}</td><td>${n.toLocaleString()}</td><td>${c}</td><td><span class="bdg ${bdg}">${tasa}%</span></td><td style="font-size:9px;color:var(--gray-dk)">${contextos[f]||''}</td></tr>`;
+  });
+  document.getElementById('fuenteTableBody').innerHTML = tHtml;
+  document.getElementById('fuenteTableFoot').innerHTML = `<tr><td>Total</td><td>${total.toLocaleString()}</td><td>${totalC}</td><td><span class="bdg bdg-gray">${(totalC/total*100).toFixed(1)}%</span></td><td style="font-size:9px;color:var(--gray-dk)">Tasa similar entre fuentes</td></tr>`;
+
+  const f1tasa = ((cancelByFuente['Funcionario']||0)/(fuentes['Funcionario']||1)*100).toFixed(1);
+  const f2tasa = ((cancelByFuente['Portal Paciente']||0)/(fuentes['Portal Paciente']||1)*100).toFixed(1);
+  document.getElementById('alertFuenteTable').innerHTML = `Las tasas de cancelación son similares entre Funcionario (${f1tasa}%) y Portal Paciente (${f2tasa}%) — no hay diferencia significativa por fuente de agendamiento.`;
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function showPage(i) {
+  document.querySelectorAll('.nav-tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  document.querySelectorAll('.page').forEach((p,j)=>p.classList.toggle('active',i===j));
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
