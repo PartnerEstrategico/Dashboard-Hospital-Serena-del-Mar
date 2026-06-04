@@ -332,14 +332,13 @@
         <div class="filter-label">Período:</div>
         <select class="filter-select" id="dateFilter" onchange="onPeriodChange()">
           <option value="all">Todos los datos</option>
-          <option value="today">Último día disponible</option>
           <option value="week">Últimos 7 días</option>
           <option value="month">Último mes</option>
           <option value="specific">Fecha específica</option>
           <option value="range">Rango personalizado</option>
         </select>
       </div>
-      <div class="filter-group" id="specificDateGroup" style="display:none">
+      <div class="filter-group" id="specificDateGroup">
         <div class="filter-label">Fecha:</div>
         <select class="filter-select" id="specificDate" onchange="applyFilters()">
           <option value="">— Selecciona —</option>
@@ -564,6 +563,10 @@ async function loadData() {
     });
     if (allDates.length > 0) sel.value = allDates[allDates.length - 1];
 
+    // Set default period to last date
+    document.getElementById('dateFilter').value = 'specific';
+    document.getElementById('specificDateGroup').style.display = 'flex';
+
     // Populate range selects
     const fromSel = document.getElementById('dateFrom');
     const toSel = document.getElementById('dateTo');
@@ -629,8 +632,8 @@ function populateFilters() {
 // ── FILTERS ─────────────────────────────────────────────────────────────────
 function onPeriodChange() {
   const v = document.getElementById('dateFilter').value;
-  document.getElementById('specificDateGroup').style.display = v === 'specific' ? 'flex' : 'none';
-  document.getElementById('rangeGroup').style.display = v === 'range' ? 'flex' : 'none';
+  document.getElementById('specificDateGroup').style.display = (v === 'specific') ? 'flex' : 'none';
+  document.getElementById('rangeGroup').style.display = (v === 'range') ? 'flex' : 'none';
   applyFilters();
 }
 
