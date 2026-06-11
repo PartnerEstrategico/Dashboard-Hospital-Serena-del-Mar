@@ -21,7 +21,7 @@
     .page.active { display: block; }
 
     /* FILTERS */
-    .filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: nowrap; }
     .filter-label { color: #64748b; font-size: 13px; }
     .filter-select { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 6px; outline: none; cursor: pointer; min-width: 160px; }
     .date-badge { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 6px; }
@@ -203,7 +203,7 @@
 
   <!-- ===== TAB 0: RESUMEN EJECUTIVO ===== -->
   <div class="page active" id="tab0">
-    <div class="filter-row">
+    <div class="filter-row" style="flex-wrap:nowrap; align-items:center;">
       <span class="filter-label">Período:</span>
       <select class="filter-select" id="periodo-select" onchange="toggleFecha(this.value)">
         <option value="todos">Todos los datos</option>
@@ -213,8 +213,20 @@
         <option value="rango">Rango personalizado</option>
       </select>
       <span class="filter-label" id="fecha-label">Fecha:</span>
-      <span class="date-badge" id="fecha-badge">12 jun 2026</span>
-      <span class="citas-badge">335 citas</span>
+      <select class="filter-select" id="fecha-select" style="min-width:140px;">
+        <option>12 jun 2026</option>
+        <option>11 jun 2026</option>
+        <option>10 jun 2026</option>
+        <option>9 jun 2026</option>
+        <option>8 jun 2026</option>
+        <option>7 jun 2026</option>
+        <option>6 jun 2026</option>
+      </select>
+      <span id="rango-label" style="display:none" class="filter-label">Desde:</span>
+      <input type="date" id="rango-desde" class="filter-select" style="display:none; min-width:130px;" value="2026-06-06">
+      <span id="rango-label2" style="display:none" class="filter-label">Hasta:</span>
+      <input type="date" id="rango-hasta" class="filter-select" style="display:none; min-width:130px;" value="2026-06-12">
+      <span class="citas-badge" id="citas-badge">335 citas</span>
     </div>
 
     <div class="section-label">INDICADORES CLAVE</div>
@@ -468,9 +480,39 @@
 
   <script>
     function toggleFecha(val) {
-      const show = val === 'fecha';
-      document.getElementById('fecha-label').style.display = show ? '' : 'none';
-      document.getElementById('fecha-badge').style.display = show ? '' : 'none';
+      const fechaLabel = document.getElementById('fecha-label');
+      const fechaSelect = document.getElementById('fecha-select');
+      const rangoLabel = document.getElementById('rango-label');
+      const rangoLabel2 = document.getElementById('rango-label2');
+      const rangoDesde = document.getElementById('rango-desde');
+      const rangoHasta = document.getElementById('rango-hasta');
+      const citasBadge = document.getElementById('citas-badge');
+
+      // hide all date controls first
+      fechaLabel.style.display = 'none';
+      fechaSelect.style.display = 'none';
+      rangoLabel.style.display = 'none';
+      rangoLabel2.style.display = 'none';
+      rangoDesde.style.display = 'none';
+      rangoHasta.style.display = 'none';
+
+      if (val === 'fecha') {
+        fechaLabel.style.display = '';
+        fechaSelect.style.display = '';
+        citasBadge.textContent = '335 citas';
+      } else if (val === 'todos') {
+        citasBadge.textContent = '14,878 registros';
+      } else if (val === '7dias') {
+        citasBadge.textContent = '2,345 citas';
+      } else if (val === 'mes') {
+        citasBadge.textContent = '9,102 citas';
+      } else if (val === 'rango') {
+        rangoLabel.style.display = '';
+        rangoDesde.style.display = '';
+        rangoLabel2.style.display = '';
+        rangoHasta.style.display = '';
+        citasBadge.textContent = '— citas';
+      }
     }
     function showTab(n) {
       document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
