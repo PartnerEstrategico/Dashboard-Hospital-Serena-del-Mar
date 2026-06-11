@@ -8,35 +8,31 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     body { background: #f1f3f6; color: #1e293b; min-height: 100vh; }
 
-    /* TOPBAR */
-    .topbar { background: #1e2d45; padding: 1rem 1.5rem 0; }
-    .topbar-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .hospital-name { color: #2dd4bf; font-size: 15px; font-weight: 700; }
-    .hospital-sub { color: #94a3b8; font-size: 11px; margin-top: 2px; }
+    .topbar { background: #1e2d45; padding: 0.75rem 1.5rem 0; }
+    .topbar-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+    .hospital-name { color: #2dd4bf; font-size: 14px; font-weight: 700; }
+    .hospital-sub { color: #94a3b8; font-size: 11px; }
     .last-data { color: #94a3b8; font-size: 11px; text-align: right; }
-    .tabs { display: flex; margin-top: 1rem; overflow-x: auto; gap: 0; }
-    .tab { color: #94a3b8; font-size: 13px; padding: 0.75rem 1.2rem; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.2s; }
-    .tab:hover { color: #e2e8f0; }
+    .tabs { display: flex; overflow-x: auto; }
+    .tab { color: #94a3b8; font-size: 13px; padding: 0.6rem 1.1rem; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
     .tab.active { color: #2dd4bf; border-bottom: 2px solid #2dd4bf; }
 
-    /* BODY */
-    .page { display: none; padding: 1.25rem; max-width: 960px; margin: 0 auto; }
+    .page { display: none; padding: 1.25rem 1.5rem 3rem; width: 100%; }
     .page.active { display: block; }
 
     /* FILTERS */
-    .filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+    .filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
     .filter-label { color: #64748b; font-size: 13px; }
-    .filter-select { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 8px; outline: none; cursor: pointer; }
-    .date-badge { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 8px; }
+    .filter-select { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 6px; outline: none; cursor: pointer; min-width: 160px; }
+    .date-badge { background: #fff; border: 1px solid #e2e8f0; color: #1e293b; font-size: 13px; padding: 5px 10px; border-radius: 6px; }
     .citas-badge { background: #1e2d45; color: #fff; font-size: 13px; padding: 5px 14px; border-radius: 20px; font-weight: 600; }
 
-    /* SECTION LABEL */
     .section-label { color: #94a3b8; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; margin: 1.25rem 0 0.75rem; }
 
     /* KPI CARDS */
     .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    @media(min-width:600px){ .cards-grid { grid-template-columns: repeat(4, 1fr); } }
-    .card { background: #fff; border-radius: 14px; padding: 1rem 1.1rem; border: 1px solid #e8ecf0; }
+    @media(min-width:600px){ .cards-grid { grid-template-columns: repeat(5, 1fr); } }
+    .card { background: #fff; border-radius: 12px; padding: 1rem 1.1rem; border: 1px solid #e8ecf0; }
     .card-label { color: #94a3b8; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; margin-bottom: 8px; line-height: 1.4; }
     .card-number { font-size: 30px; font-weight: 700; line-height: 1; }
     .card-sub { font-size: 12px; margin-top: 5px; }
@@ -51,9 +47,12 @@
     .card.no-asistiran { border-top: 3px solid #f87171; }
     .card.no-asistiran .card-number { color: #dc2626; }
     .card.no-asistiran .card-sub { color: #dc2626; }
+    .card.no-contactadas { border-top: 3px solid #ea580c; }
+    .card.no-contactadas .card-number { color: #ea580c; }
+    .card.no-contactadas .card-sub { color: #ea580c; }
 
-    /* COBERTURA (NUEVO) */
-    .cobertura-box { background: #fff; border-radius: 14px; border: 1px solid #e8ecf0; border-top: 3px solid #2dd4bf; padding: 1rem 1.1rem; margin-top: 12px; }
+    /* COBERTURA */
+    .cobertura-box { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; border-top: 3px solid #2dd4bf; padding: 1rem 1.1rem; margin-top: 12px; }
     .cobertura-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
     .cobertura-title { color: #94a3b8; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; }
     .new-badge { background: #fff7ed; color: #ea580c; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 700; }
@@ -70,7 +69,7 @@
     .progress-label { font-size: 11px; color: #64748b; }
 
     /* CUPOS */
-    .cupos-box { background: #fff; border-radius: 14px; border: 1px solid #e8ecf0; border-left: 4px solid #f87171; padding: 1rem 1.1rem; margin-top: 12px; }
+    .cupos-box { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; border-left: 4px solid #f87171; padding: 1rem 1.1rem; margin-top: 12px; }
     .cupos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
     .cupos-title { color: #1e293b; font-size: 14px; font-weight: 600; }
     .cupos-badge { background: #fef2f2; color: #dc2626; font-size: 12px; padding: 3px 12px; border-radius: 20px; font-weight: 600; border: 1px solid #fecaca; }
@@ -82,31 +81,27 @@
     .cupo-item-num { color: #dc2626; font-size: 22px; font-weight: 700; }
     .cupo-item-sub { color: #94a3b8; font-size: 11px; }
 
-    /* ENCUESTA */
+    /* ENCUESTA + LLAMADA */
     .two-col { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
     @media(min-width:600px){ .two-col { grid-template-columns: 1fr 1fr; } }
-    .box { background: #fff; border-radius: 14px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
+    .box { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
     .box-title { color: #94a3b8; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; margin-bottom: 14px; }
     .encuesta-inner { display: flex; align-items: center; gap: 1.5rem; }
     .donut-wrap { position: relative; flex-shrink: 0; }
-    .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-    .donut-pct { font-size: 17px; font-weight: 700; color: #1e293b; }
+    .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .donut-pct { font-size: 16px; font-weight: 700; color: #1e293b; }
     .donut-sub { font-size: 10px; color: #94a3b8; }
     .legend { display: flex; flex-direction: column; gap: 9px; }
     .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .legend-val { font-weight: 600; color: #1e293b; margin-left: 2px; }
-
-    /* LLAMADA */
     .llamada-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .llamada-row:last-child { margin-bottom: 0; }
     .llamada-name { color: #64748b; font-size: 12px; width: 115px; flex-shrink: 0; }
     .llamada-bar-wrap { flex: 1; background: #f1f5f9; border-radius: 4px; height: 8px; overflow: hidden; }
     .llamada-bar { height: 100%; border-radius: 4px; }
-    .llamada-val { color: #1e293b; font-size: 12px; font-weight: 600; white-space: nowrap; min-width: 70px; text-align: right; }
-
-    /* DURACION */
-    .duracion-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: flex-end; margin-top: 0.75rem; }
+    .llamada-val { color: #1e293b; font-size: 12px; font-weight: 600; white-space: nowrap; min-width: 80px; text-align: right; }
+    .duracion-cols { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; align-items: flex-end; margin-top: 0.75rem; }
     .dur-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .dur-num { font-size: 15px; font-weight: 700; color: #1e293b; }
     .dur-bar-wrap { width: 100%; display: flex; justify-content: center; }
@@ -114,29 +109,79 @@
     .dur-label { font-size: 10px; color: #94a3b8; text-align: center; }
     .dur-pct { font-size: 10px; color: #64748b; text-align: center; font-weight: 600; }
 
-    /* POR PROFESIONAL */
-    .table-wrap { overflow-x: auto; margin-top: 12px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { color: #94a3b8; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; padding: 8px 10px; text-align: left; border-bottom: 1px solid #e8ecf0; }
-    td { padding: 9px 10px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
-    tr:hover td { background: #f8fafc; }
-    .pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
-    .pill-green { background: #f0fdf4; color: #16a34a; }
-    .pill-yellow { background: #fffbeb; color: #b45309; }
-    .pill-red { background: #fef2f2; color: #dc2626; }
+    /* ===== TAB 1: POR PROFESIONAL ===== */
+    .nota-top { background: #fff0f0; border-left: 3px solid #f87171; padding: 8px 14px; font-size: 12px; color: #64748b; margin-bottom: 1rem; border-radius: 0 6px 6px 0; }
 
-    /* FUENTES Y COBERTURA */
-    .fuentes-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
-    @media(min-width:600px){ .fuentes-grid { grid-template-columns: 1fr 1fr; } }
-    .fuente-card { background: #fff; border-radius: 14px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
-    .fuente-name { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
-    .fuente-sub { font-size: 12px; color: #64748b; margin-bottom: 12px; }
-    .fuente-stat { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
-    .fuente-stat:last-child { border-bottom: none; }
-    .fuente-stat-label { color: #64748b; }
-    .fuente-stat-val { font-weight: 600; color: #1e293b; }
+    .ranking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
+    @media(max-width:600px){ .ranking-grid { grid-template-columns: 1fr; } }
+    .ranking-box { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
+    .ranking-title { font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.07em; margin-bottom: 12px; }
+    .ranking-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+    .ranking-row:last-child { border-bottom: none; font-weight: 700; color: #1e293b; }
+    .ranking-left { display: flex; align-items: center; gap: 8px; color: #1e293b; }
+    .rank-num { width: 20px; height: 20px; border-radius: 50%; background: #1e2d45; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ranking-right { display: flex; align-items: center; gap: 10px; }
+    .rank-count { font-weight: 700; color: #1e293b; }
+    .tasa-pill { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+    .tasa-red { background: #fef2f2; color: #dc2626; }
+    .tasa-orange { background: #fff7ed; color: #b45309; }
+    .tasa-gray { color: #64748b; font-size: 12px; }
 
-    .nota { background: #fff; border-left: 4px solid #f87171; padding: 10px 14px; border-radius: 0 10px 10px 0; font-size: 12px; color: #64748b; margin-bottom: 1rem; }
+    /* tabla detalle */
+    .det-title { font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+    .det-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .det-table thead tr { background: #1e2d45; }
+    .det-table th { color: #94a3b8; font-size: 11px; font-weight: 600; padding: 10px 12px; text-align: left; }
+    .det-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
+    .det-table tr:hover td { background: #f8fafc; }
+    .risk-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 4px; }
+    .risk-alto { background: #fef2f2; color: #dc2626; }
+    .risk-critico { background: #dc262622; color: #991b1b; border: 1px solid #fca5a5; }
+    .risk-bajo { background: #f0fdf4; color: #16a34a; }
+    .risk-moderado { color: #64748b; }
+    .tasa-colored { font-weight: 700; }
+
+    /* ===== TAB 2: FUENTES Y COBERTURA ===== */
+    .kpi3-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1rem; }
+    @media(max-width:500px){ .kpi3-grid { grid-template-columns: 1fr; } }
+    .kpi3-card { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
+    .kpi3-label { font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.07em; margin-bottom: 6px; }
+    .kpi3-num { font-size: 32px; font-weight: 700; line-height: 1; }
+    .kpi3-sub-pct { font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .kpi3-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .kpi3-card.alterno .kpi3-num { color: #1e293b; }
+    .kpi3-card.sin-alterno { background: #fffbeb; border-color: #fde68a; }
+    .kpi3-card.sin-alterno .kpi3-num { color: #b45309; }
+    .kpi3-card.sin-alterno .kpi3-sub-pct { color: #b45309; }
+    .kpi3-card.principal { background: #f0fdf4; border-color: #bbf7d0; }
+    .kpi3-card.principal .kpi3-num { color: #15803d; }
+    .kpi3-card.principal .kpi3-sub-pct { color: #15803d; }
+
+    .oportunidad { background: #eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; font-size: 12px; color: #1d4ed8; border-radius: 0 6px 6px 0; margin-bottom: 1.25rem; }
+    .mejora { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 10px 14px; font-size: 12px; color: #92400e; border-radius: 0 6px 6px 0; margin-top: 10px; }
+
+    .f-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.25rem; }
+    @media(max-width:600px){ .f-two-col { grid-template-columns: 1fr; } }
+    .f-box { background: #fff; border-radius: 12px; border: 1px solid #e8ecf0; padding: 1rem 1.1rem; }
+    .f-box-title { font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.07em; margin-bottom: 14px; }
+    .f-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .f-row:last-child { margin-bottom: 0; }
+    .f-name { font-size: 13px; color: #1e293b; width: 130px; flex-shrink: 0; }
+    .f-bar-wrap { flex: 1; background: #f1f5f9; border-radius: 4px; height: 8px; overflow: hidden; }
+    .f-bar { height: 100%; border-radius: 4px; }
+    .f-val { font-size: 13px; font-weight: 600; color: #1e293b; white-space: nowrap; min-width: 80px; text-align: right; }
+    .f-insight { background: #f0fdf4; border-left: 3px solid #4ade80; padding: 8px 12px; font-size: 12px; color: #15803d; border-radius: 0 6px 6px 0; margin-top: 10px; }
+
+    .canc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .canc-table thead tr { background: #1e2d45; }
+    .canc-table th { color: #94a3b8; font-size: 11px; font-weight: 600; padding: 10px 12px; text-align: left; }
+    .canc-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
+    .canc-table tr.total-row td { font-weight: 700; }
+    .canc-table tr:hover td { background: #f8fafc; }
+    .tasa-warn { color: #b45309; font-weight: 700; }
+    .ctx { color: #94a3b8; font-size: 12px; }
+    .canc-insight { background: #f0fdf4; border-left: 3px solid #4ade80; padding: 8px 12px; font-size: 12px; color: #15803d; border-radius: 0 6px 6px 0; margin-top: 10px; }
+    .table-wrap { overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -180,6 +225,11 @@
         <div class="card-number">267</div>
         <div class="card-sub">79.7% contact ratio</div>
       </div>
+      <div class="card no-contactadas">
+        <div class="card-label">NO CONTACTADAS <span class="new-badge" style="font-size:9px;padding:1px 5px;vertical-align:middle;">NUEVO</span></div>
+        <div class="card-number">68</div>
+        <div class="card-sub">20.3% sin contacto</div>
+      </div>
       <div class="card confirman">
         <div class="card-label">CONFIRMAN ASISTENCIA</div>
         <div class="card-number">206</div>
@@ -192,30 +242,6 @@
       </div>
     </div>
 
-    <!-- COBERTURA DE CONTACTO - NUEVO -->
-    <div class="cobertura-box">
-      <div class="cobertura-header">
-        <span class="cobertura-title">COBERTURA DE CONTACTO</span>
-        <span class="new-badge">NUEVO</span>
-      </div>
-      <div class="cob-row">
-        <span class="cob-left"><span class="dot" style="background:#2dd4bf"></span>Contactados</span>
-        <span class="cob-right val-teal">267 · 79.7%</span>
-      </div>
-      <div class="cob-row">
-        <span class="cob-left"><span class="dot" style="background:#ea580c"></span>No contactados</span>
-        <span class="cob-right val-orange">68 · 20.3%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width:79.7%"></div>
-      </div>
-      <div class="progress-labels">
-        <span class="progress-label val-teal">Contactados 79.7%</span>
-        <span class="progress-label val-orange">No contactados 20.3%</span>
-      </div>
-    </div>
-
-    <!-- CUPOS -->
     <div class="cupos-box">
       <div class="cupos-header">
         <span class="cupos-title">Cupos disponibles para reasignación</span>
@@ -225,14 +251,13 @@
       <div class="cupos-grid">
         <div class="cupo-item"><div class="cupo-item-label">Procedimiento de Medicina Física y Rehabilitación</div><div class="cupo-item-num">8</div><div class="cupo-item-sub">cupos</div></div>
         <div class="cupo-item"><div class="cupo-item-label">Medicina Física y Rehabilitación</div><div class="cupo-item-num">3</div><div class="cupo-item-sub">cupos</div></div>
-        <div class="cupo-item"><div class="cupo-item-label">Dermatología</div><div class="cupo-item-num">5</div><div class="cupo-item-sub">cupos</div></div>
-        <div class="cupo-item"><div class="cupo-item-label">Ortopedia Traumatología</div><div class="cupo-item-num">4</div><div class="cupo-item-sub">cupos</div></div>
-        <div class="cupo-item"><div class="cupo-item-label">Oncología</div><div class="cupo-item-num">6</div><div class="cupo-item-sub">cupos</div></div>
-        <div class="cupo-item"><div class="cupo-item-label">Cardiología</div><div class="cupo-item-num">5</div><div class="cupo-item-sub">cupos</div></div>
+        <div class="cupo-item"><div class="cupo-item-label">Dermatología</div><div class="cupo-item-num">2</div><div class="cupo-item-sub">cupos</div></div>
+        <div class="cupo-item"><div class="cupo-item-label">Ortopedia Traumatología</div><div class="cupo-item-num">2</div><div class="cupo-item-sub">cupos</div></div>
+        <div class="cupo-item"><div class="cupo-item-label">Oncología</div><div class="cupo-item-num">2</div><div class="cupo-item-sub">cupos</div></div>
+        <div class="cupo-item"><div class="cupo-item-label">Cardiología</div><div class="cupo-item-num">2</div><div class="cupo-item-sub">cupos</div></div>
       </div>
     </div>
 
-    <!-- ENCUESTA + LLAMADA -->
     <div class="two-col">
       <div class="box">
         <div class="box-title">RESULTADO ENCUESTA</div>
@@ -240,17 +265,11 @@
           <div class="donut-wrap">
             <svg width="90" height="90" viewBox="0 0 90 90">
               <circle cx="45" cy="45" r="32" fill="none" stroke="#f1f5f9" stroke-width="11"/>
-              <circle cx="45" cy="45" r="32" fill="none" stroke="#4ade80" stroke-width="11"
-                stroke-dasharray="174.1 201.1" stroke-dashoffset="50.3" />
-              <circle cx="45" cy="45" r="32" fill="none" stroke="#f87171" stroke-width="11"
-                stroke-dasharray="26.3 201.1" stroke-dashoffset="-123.8" />
-              <circle cx="45" cy="45" r="32" fill="none" stroke="#e2e8f0" stroke-width="11"
-                stroke-dasharray="30.2 201.1" stroke-dashoffset="-150.1" />
+              <circle cx="45" cy="45" r="32" fill="none" stroke="#4ade80" stroke-width="11" stroke-dasharray="174.1 201.1" stroke-dashoffset="50.3"/>
+              <circle cx="45" cy="45" r="32" fill="none" stroke="#f87171" stroke-width="11" stroke-dasharray="26.3 201.1" stroke-dashoffset="-123.8"/>
+              <circle cx="45" cy="45" r="32" fill="none" stroke="#e2e8f0" stroke-width="11" stroke-dasharray="30.2 201.1" stroke-dashoffset="-150.1"/>
             </svg>
-            <div class="donut-center">
-              <div class="donut-pct">87%</div>
-              <div class="donut-sub">confirma</div>
-            </div>
+            <div class="donut-center"><div class="donut-pct">87%</div><div class="donut-sub">confirma</div></div>
           </div>
           <div class="legend">
             <div class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>Asistirá — <span class="legend-val">206 (86.9%)</span></div>
@@ -259,108 +278,120 @@
           </div>
         </div>
       </div>
-
       <div class="box">
         <div class="box-title">RESULTADO DE LA LLAMADA</div>
-        <div class="llamada-row">
-          <span class="llamada-name">Contestó</span>
-          <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:79.7%;background:#1e3a5f;"></div></div>
-          <span class="llamada-val">267 · 79.7%</span>
-        </div>
-        <div class="llamada-row">
-          <span class="llamada-name">No contestó</span>
-          <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:30%;background:#f59e0b;"></div></div>
-          <span class="llamada-val">32 · 9.6%</span>
-        </div>
-        <div class="llamada-row">
-          <span class="llamada-name">Buzón de voz</span>
-          <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:30%;background:#a78bfa;"></div></div>
-          <span class="llamada-val">32 · 9.6%</span>
-        </div>
-        <div class="llamada-row">
-          <span class="llamada-name">Número inválido</span>
-          <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:4%;background:#94a3b8;"></div></div>
-          <span class="llamada-val">3 · 0.9%</span>
-        </div>
-        <div class="llamada-row">
-          <span class="llamada-name">Línea ocupada</span>
-          <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:2%;background:#94a3b8;"></div></div>
-          <span class="llamada-val">1 · 0.3%</span>
-        </div>
+        <div class="llamada-row"><span class="llamada-name">Contestó</span><div class="llamada-bar-wrap"><div class="llamada-bar" style="width:79.7%;background:#1e3a5f;"></div></div><span class="llamada-val">267 · 79.7%</span></div>
+        <div class="llamada-row"><span class="llamada-name">No contestó</span><div class="llamada-bar-wrap"><div class="llamada-bar" style="width:30%;background:#f59e0b;"></div></div><span class="llamada-val">32 · 9.6%</span></div>
+        <div class="llamada-row"><span class="llamada-name">Buzón de voz</span><div class="llamada-bar-wrap"><div class="llamada-bar" style="width:30%;background:#a78bfa;"></div></div><span class="llamada-val">32 · 9.6%</span></div>
+        <div class="llamada-row"><span class="llamada-name">Número inválido</span><div class="llamada-bar-wrap"><div class="llamada-bar" style="width:4%;background:#94a3b8;"></div></div><span class="llamada-val">3 · 0.9%</span></div>
+        <div class="llamada-row"><span class="llamada-name">Línea ocupada</span><div class="llamada-bar-wrap"><div class="llamada-bar" style="width:2%;background:#94a3b8;"></div></div><span class="llamada-val">1 · 0.3%</span></div>
       </div>
     </div>
 
-    <!-- DURACION -->
     <div class="box" style="margin-top:12px;">
       <div class="box-title">DURACIÓN DE LLAMADAS (SEG)</div>
       <div class="duracion-cols">
-        <div class="dur-col">
-          <div class="dur-num">13</div>
-          <div class="dur-bar-wrap"><div class="dur-bar" style="height:20px;background:#2dd4bf;"></div></div>
-          <div class="dur-label">1–15 seg</div>
-          <div class="dur-pct">4.0%</div>
-        </div>
-        <div class="dur-col">
-          <div class="dur-num">21</div>
-          <div class="dur-bar-wrap"><div class="dur-bar" style="height:34px;background:#2dd4bf;"></div></div>
-          <div class="dur-label">16–30 seg</div>
-          <div class="dur-pct">7.9%</div>
-        </div>
-        <div class="dur-col">
-          <div class="dur-num">108</div>
-          <div class="dur-bar-wrap"><div class="dur-bar" style="height:80px;background:#1e3a5f;"></div></div>
-          <div class="dur-label">31–45 seg</div>
-          <div class="dur-pct">40.4%</div>
-        </div>
-        <div class="dur-col">
-          <div class="dur-num">125</div>
-          <div class="dur-bar-wrap"><div class="dur-bar" style="height:96px;background:#1e3a5f;"></div></div>
-          <div class="dur-label">&gt;45 seg</div>
-          <div class="dur-pct">46.8%</div>
-        </div>
+        <div class="dur-col"><div class="dur-num">13</div><div class="dur-bar-wrap"><div class="dur-bar" style="height:20px;background:#2dd4bf;"></div></div><div class="dur-label">1–15 seg</div><div class="dur-pct">4.0%</div></div>
+        <div class="dur-col"><div class="dur-num">21</div><div class="dur-bar-wrap"><div class="dur-bar" style="height:34px;background:#2dd4bf;"></div></div><div class="dur-label">16–30 seg</div><div class="dur-pct">7.9%</div></div>
+        <div class="dur-col"><div class="dur-num">108</div><div class="dur-bar-wrap"><div class="dur-bar" style="height:80px;background:#1e3a5f;"></div></div><div class="dur-label">31–45 seg</div><div class="dur-pct">40.4%</div></div>
+        <div class="dur-col"><div class="dur-num">125</div><div class="dur-bar-wrap"><div class="dur-bar" style="height:96px;background:#1e3a5f;"></div></div><div class="dur-label">&gt;45 seg</div><div class="dur-pct">46.8%</div></div>
       </div>
     </div>
   </div>
 
   <!-- ===== TAB 1: POR PROFESIONAL / ESPECIALIDAD ===== -->
   <div class="page" id="tab1">
-    <div class="nota">* Detalle de profesional y horario disponibles en la hoja DETALLE del informe</div>
+    <div class="nota-top">* Detalle de profesional y horario disponibles en la hoja DETALLE del informe</div>
 
     <div class="filter-row">
       <span class="filter-label">Especialidad:</span>
-      <select class="filter-select" onchange="filterTabla(this.value)">
+      <select class="filter-select" onchange="filterTabla(this.value,'esp')">
         <option value="">Todas</option>
-        <option>Cardiología</option>
+        <option>Procedimiento de Medicina Física y Rehabilitacion</option>
+        <option>Medicina Física y Rehabilitacion</option>
         <option>Dermatología</option>
-        <option>Medicina Física y Rehabilitación</option>
-        <option>Oncología</option>
         <option>Ortopedia Traumatología</option>
+        <option>Oncología</option>
+        <option>Cardiología</option>
+        <option>Cirugía Vascular</option>
+        <option>Urología</option>
+        <option>Pediatría</option>
+        <option>Otorrinolaringología</option>
+        <option>Reumatología</option>
+        <option>Endocrinología</option>
+        <option>Ortopedia Rodilla</option>
+        <option>Cardiología Pediátrica</option>
+        <option>Geriatría</option>
+      </select>
+      <span class="filter-label">Profesional:</span>
+      <select class="filter-select" onchange="filterTabla(this.value,'prof')">
+        <option value="">Todos</option>
+        <option>Terapia Física Sala 3</option>
+        <option>Julio Reyes</option>
+        <option>Marghy Guerra</option>
+        <option>Terapia Física Sala 2</option>
+        <option>Adriana Cogua</option>
+        <option>Abraham Jose Hernandez</option>
+        <option>Julian Mauricio Moreno</option>
+        <option>Carlos Morrugo</option>
       </select>
     </div>
 
+    <div class="ranking-grid">
+      <div class="ranking-box">
+        <div class="ranking-title">ESPECIALIDADES CON MÁS CANCELACIONES</div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">1</span>Procedimiento de Medicina Física y Rehabilitacion</div><div class="ranking-right"><span class="rank-count">8</span><span class="tasa-pill tasa-orange">15.1%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">2</span>Medicina Física y Rehabilitacion</div><div class="ranking-right"><span class="rank-count">3</span><span class="tasa-pill tasa-red">30.0%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">3</span>Dermatología</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-orange">10.5%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">4</span>Ortopedia Traumatología</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-gray">6.5%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">5</span>Oncología</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-gray">9.1%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">6</span>Cardiología</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-orange">14.3%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">7</span>Cirugía Vascular</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-red">33.3%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">8</span>Urología</div><div class="ranking-right"><span class="rank-count">1</span><span class="tasa-gray">5.9%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left" style="font-weight:700;">Total cancelaciones</div><div class="ranking-right"><span class="rank-count">31</span><span class="tasa-gray">9.3% base</span></div></div>
+      </div>
+      <div class="ranking-box">
+        <div class="ranking-title">PROFESIONALES CON MÁS CANCELACIONES</div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">1</span>Terapia Física Sala 3</div><div class="ranking-right"><span class="rank-count">5</span><span class="tasa-pill tasa-red">25.0%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">2</span>Julio Reyes</div><div class="ranking-right"><span class="rank-count">3</span><span class="tasa-pill tasa-red">30.0%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">3</span>Marghy Guerra</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-orange">10.5%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">4</span>Terapia Física Sala 2</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-orange">14.3%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">5</span>Adriana Cogua</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-orange">22.2%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">6</span>Abraham Jose Hernandez</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-gray">9.1%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">7</span>Julian Mauricio Moreno</div><div class="ranking-right"><span class="rank-count">2</span><span class="tasa-pill tasa-red">33.3%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left"><span class="rank-num">8</span>Carlos Morrugo</div><div class="ranking-right"><span class="rank-count">1</span><span class="tasa-pill tasa-orange">12.5%</span></div></div>
+        <div class="ranking-row"><div class="ranking-left" style="font-weight:700;">Total cancelaciones</div><div class="ranking-right"><span class="rank-count">31</span><span class="tasa-gray">9.3% base</span></div></div>
+      </div>
+    </div>
+
+    <div class="det-title">DETALLE CANCELACIONES POR ESPECIALIDAD — VOLUMEN VS TASA</div>
     <div class="table-wrap">
-      <table id="prof-table">
+      <table class="det-table" id="det-table">
         <thead>
           <tr>
-            <th>PROFESIONAL</th>
-            <th>ESPECIALIDAD</th>
-            <th>CITADOS</th>
-            <th>CONTACTADOS</th>
-            <th>% CONTACTO</th>
-            <th>CONFIRMAN</th>
-            <th>NO ASISTIRÁN</th>
-            <th>ESTADO</th>
+            <th>Especialidad</th>
+            <th>Total citas</th>
+            <th>Cancelan</th>
+            <th>Tasa</th>
+            <th>Riesgo</th>
           </tr>
         </thead>
         <tbody>
-          <tr data-esp="Cardiología"><td>Dra. Martínez</td><td>Cardiología</td><td>42</td><td>36</td><td>85.7%</td><td>30</td><td>5</td><td><span class="pill pill-green">Bueno</span></td></tr>
-          <tr data-esp="Dermatología"><td>Dr. Herrera</td><td>Dermatología</td><td>38</td><td>28</td><td>73.7%</td><td>22</td><td>5</td><td><span class="pill pill-yellow">Regular</span></td></tr>
-          <tr data-esp="Medicina Física y Rehabilitación"><td>Dra. Ospina</td><td>Medicina Física y Rehabilitación</td><td>55</td><td>47</td><td>85.5%</td><td>40</td><td>6</td><td><span class="pill pill-green">Bueno</span></td></tr>
-          <tr data-esp="Medicina Física y Rehabilitación"><td>Dr. Vargas</td><td>Medicina Física y Rehabilitación</td><td>48</td><td>38</td><td>79.2%</td><td>32</td><td>5</td><td><span class="pill pill-yellow">Regular</span></td></tr>
-          <tr data-esp="Oncología"><td>Dra. Jiménez</td><td>Oncología</td><td>30</td><td>21</td><td>70.0%</td><td>17</td><td>4</td><td><span class="pill pill-red">Bajo</span></td></tr>
-          <tr data-esp="Ortopedia Traumatología"><td>Dr. Palomino</td><td>Ortopedia Traumatología</td><td>44</td><td>36</td><td>81.8%</td><td>30</td><td>4</td><td><span class="pill pill-green">Bueno</span></td></tr>
-          <tr data-esp="Cardiología"><td>Dr. Suárez</td><td>Cardiología</td><td>40</td><td>29</td><td>72.5%</td><td>23</td><td>5</td><td><span class="pill pill-yellow">Regular</span></td></tr>
-          <tr data-esp="Dermatología"><td>Dra. Reyes</td><td>Dermatología</td><td>38</td><td>32</td><td>84.2%</td><td>12</td><td>3</td><td><span class="pill pill-green">Bueno</span></td></tr>
+          <tr data-esp="Procedimiento de Medicina Física y Rehabilitacion" data-prof=""><td>Procedimiento de Medicina Física y Rehabilitacion</td><td>53</td><td>8</td><td><span class="tasa-colored" style="color:#ea580c">15.1%</span></td><td><span class="risk-pill risk-alto">Alto</span></td></tr>
+          <tr data-esp="Medicina Física y Rehabilitacion" data-prof=""><td>Medicina Física y Rehabilitacion</td><td>10</td><td>3</td><td><span class="tasa-colored" style="color:#dc2626">30.0%</span></td><td><span class="risk-pill risk-critico">Crítico</span></td></tr>
+          <tr data-esp="Ortopedia Traumatología" data-prof=""><td>Ortopedia Traumatología</td><td>31</td><td>2</td><td><span class="tasa-colored" style="color:#64748b">6.5%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Oncología" data-prof=""><td>Oncología</td><td>22</td><td>2</td><td><span class="tasa-colored" style="color:#64748b">9.1%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Cirugía Vascular" data-prof=""><td>Cirugía Vascular</td><td>6</td><td>2</td><td><span class="tasa-colored" style="color:#dc2626">33.3%</span></td><td><span class="risk-pill risk-critico">Crítico</span></td></tr>
+          <tr data-esp="Dermatología" data-prof="Marghy Guerra"><td>Dermatología</td><td>19</td><td>2</td><td><span class="tasa-colored" style="color:#ea580c">10.5%</span></td><td><span class="risk-moderado">Moderado</span></td></tr>
+          <tr data-esp="Cardiología" data-prof=""><td>Cardiología</td><td>14</td><td>2</td><td><span class="tasa-colored" style="color:#ea580c">14.3%</span></td><td><span class="risk-moderado">Moderado</span></td></tr>
+          <tr data-esp="Pediatría" data-prof=""><td>Pediatría</td><td>25</td><td>1</td><td><span class="tasa-colored" style="color:#16a34a">4.0%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Otorrinolaringología" data-prof=""><td>Otorrinolaringología</td><td>21</td><td>1</td><td><span class="tasa-colored" style="color:#16a34a">4.8%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Urología" data-prof=""><td>Urología</td><td>17</td><td>1</td><td><span class="tasa-colored" style="color:#16a34a">5.9%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Reumatología" data-prof=""><td>Reumatología</td><td>9</td><td>1</td><td><span class="tasa-colored" style="color:#ea580c">11.1%</span></td><td><span class="risk-moderado">Moderado</span></td></tr>
+          <tr data-esp="Endocrinología" data-prof=""><td>Endocrinología</td><td>12</td><td>1</td><td><span class="tasa-colored" style="color:#16a34a">8.3%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Ortopedia Rodilla" data-prof=""><td>Ortopedia Rodilla</td><td>11</td><td>1</td><td><span class="tasa-colored" style="color:#16a34a">9.1%</span></td><td><span class="risk-pill risk-bajo">Bajo</span></td></tr>
+          <tr data-esp="Cardiología Pediátrica" data-prof=""><td>Cardiología Pediátrica</td><td>4</td><td>1</td><td><span class="tasa-colored" style="color:#dc2626">25.0%</span></td><td><span class="risk-pill risk-critico">Crítico</span></td></tr>
+          <tr data-esp="Geriatría" data-prof=""><td>Geriatría</td><td>5</td><td>1</td><td><span class="tasa-colored" style="color:#dc2626">20.0%</span></td><td><span class="risk-pill risk-alto">Alto</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -368,72 +399,78 @@
 
   <!-- ===== TAB 2: FUENTES Y COBERTURA ===== -->
   <div class="page" id="tab2">
-    <div class="filter-row">
-      <span class="filter-label">Período:</span>
-      <select class="filter-select"><option>Fecha específica</option></select>
-      <span class="date-badge">12 jun 2026</span>
-    </div>
-
-    <div class="section-label">CANALES DE CONTACTO</div>
-    <div class="fuentes-grid">
-      <div class="fuente-card">
-        <div class="fuente-name">📞 Llamada telefónica</div>
-        <div class="fuente-sub">Canal principal de gestión</div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Intentos realizados</span><span class="fuente-stat-val">335</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Contactos exitosos</span><span class="fuente-stat-val">267</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Tasa de contacto</span><span class="fuente-stat-val" style="color:#0d9488">79.7%</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Duración promedio</span><span class="fuente-stat-val">48 seg</span></div>
+    <div class="kpi3-grid">
+      <div class="kpi3-card alterno">
+        <div class="kpi3-label">CON TELÉFONO ALTERNO</div>
+        <div class="kpi3-num">86</div>
+        <div class="kpi3-sub-pct" style="color:#1e293b">25.7%</div>
+        <div class="kpi3-sub">2do intento disponible</div>
       </div>
-      <div class="fuente-card">
-        <div class="fuente-name">🏥 Gestión presencial</div>
-        <div class="fuente-sub">Pacientes no contactados por línea</div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Pacientes asignados</span><span class="fuente-stat-val">68</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">% del total citado</span><span class="fuente-stat-val" style="color:#ea580c">20.3%</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">No contestó</span><span class="fuente-stat-val">32</span></div>
-        <div class="fuente-stat"><span class="fuente-stat-label">Buzón / Inválido / Ocupado</span><span class="fuente-stat-val">36</span></div>
+      <div class="kpi3-card sin-alterno">
+        <div class="kpi3-label">SIN TELÉFONO ALTERNO</div>
+        <div class="kpi3-num">249</div>
+        <div class="kpi3-sub-pct">74.3%</div>
+        <div class="kpi3-sub">solo un número</div>
+      </div>
+      <div class="kpi3-card principal">
+        <div class="kpi3-label">COBERTURA TELÉFONO PRINCIPAL</div>
+        <div class="kpi3-num">335</div>
+        <div class="kpi3-sub-pct">100%</div>
+        <div class="kpi3-sub">— todos tienen registrado</div>
       </div>
     </div>
 
-    <div class="section-label" style="margin-top:1.5rem;">COBERTURA ACUMULADA</div>
-    <div class="box">
-      <div class="llamada-row" style="margin-bottom:14px;">
-        <span class="llamada-name" style="font-weight:600;color:#1e293b;">Total citados</span>
-        <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:100%;background:#e2e8f0;"></div></div>
-        <span class="llamada-val">335 · 100%</span>
+    <div class="oportunidad">Oportunidad: 249 pacientes (74.3%) no tienen número alterno. Si no contestan el principal, no hay segundo intento posible.</div>
+
+    <div class="f-two-col">
+      <div class="f-box">
+        <div class="f-box-title">FUENTE DE AGENDAMIENTO</div>
+        <div class="f-row"><span class="f-name">Funcionario</span><div class="f-bar-wrap"><div class="f-bar" style="width:86.9%;background:#1e3a5f;"></div></div><span class="f-val">291 · 86.9%</span></div>
+        <div class="f-row"><span class="f-name">Portal Paciente</span><div class="f-bar-wrap"><div class="f-bar" style="width:12.2%;background:#2dd4bf;"></div></div><span class="f-val">41 · 12.2%</span></div>
+        <div class="f-row"><span class="f-name">Bot</span><div class="f-bar-wrap"><div class="f-bar" style="width:0.9%;background:#f59e0b;"></div></div><span class="f-val">3 · 0.9%</span></div>
+        <div class="f-insight">El 12.2% ya agenda por Portal Paciente de forma autónoma. Potencial de crecimiento digital.</div>
       </div>
-      <div class="llamada-row" style="margin-bottom:14px;">
-        <span class="llamada-name" style="font-weight:600;color:#0d9488;">Contactados</span>
-        <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:79.7%;background:#2dd4bf;"></div></div>
-        <span class="llamada-val" style="color:#0d9488;">267 · 79.7%</span>
-      </div>
-      <div class="llamada-row" style="margin-bottom:14px;">
-        <span class="llamada-name" style="font-weight:600;color:#16a34a;">Confirman</span>
-        <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:61.5%;background:#4ade80;"></div></div>
-        <span class="llamada-val" style="color:#16a34a;">206 · 61.5%</span>
-      </div>
-      <div class="llamada-row">
-        <span class="llamada-name" style="font-weight:600;color:#dc2626;">No asistirán</span>
-        <div class="llamada-bar-wrap"><div class="llamada-bar" style="width:9.3%;background:#f87171;"></div></div>
-        <span class="llamada-val" style="color:#dc2626;">31 · 9.3%</span>
+      <div class="f-box">
+        <div class="f-box-title">COBERTURA TELEFÓNICA</div>
+        <div class="f-row"><span class="f-name">Con número alterno</span><div class="f-bar-wrap"><div class="f-bar" style="width:25.7%;background:#1e3a5f;"></div></div><span class="f-val">86 · 25.7%</span></div>
+        <div class="f-row"><span class="f-name">Sin número alterno</span><div class="f-bar-wrap"><div class="f-bar" style="width:74.3%;background:#f59e0b;"></div></div><span class="f-val">249 · 74.3%</span></div>
+        <div class="f-row"><span class="f-name">Teléfono principal</span><div class="f-bar-wrap"><div class="f-bar" style="width:100%;background:#2dd4bf;"></div></div><span class="f-val">335 · 100%</span></div>
+        <div class="mejora">Mejora posible: Con más números alternos, se podría reintentar las <strong>32 llamadas que no contestaron</strong> y las <strong>32 que fueron a buzón de voz</strong>.</div>
       </div>
     </div>
 
-    <div class="section-label" style="margin-top:1.5rem;">REGISTROS TOTALES</div>
-    <div class="box">
-      <div class="fuente-stat"><span class="fuente-stat-label">Total registros en sistema</span><span class="fuente-stat-val">14,878</span></div>
-      <div class="fuente-stat"><span class="fuente-stat-label">Último dato procesado</span><span class="fuente-stat-val">12 jun 2026</span></div>
-      <div class="fuente-stat"><span class="fuente-stat-label">Registros del período seleccionado</span><span class="fuente-stat-val">335</span></div>
+    <div class="det-title">CANCELACIONES SEGÚN FUENTE DE AGENDAMIENTO</div>
+    <div class="table-wrap">
+      <table class="canc-table">
+        <thead>
+          <tr>
+            <th>Fuente</th>
+            <th>Total citas</th>
+            <th>Cancela</th>
+            <th>Tasa</th>
+            <th>Contexto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Funcionario</td><td>291</td><td>26</td><td>8.9%</td><td class="ctx">Agendado por el equipo de call center</td></tr>
+          <tr><td>Portal Paciente</td><td>41</td><td>4</td><td>9.8%</td><td class="ctx">Autoagendado por el paciente</td></tr>
+          <tr><td>Bot</td><td>3</td><td>1</td><td class="tasa-warn">33.3%</td><td class="ctx">Volumen muy bajo</td></tr>
+          <tr class="total-row"><td>Total</td><td>335</td><td>31</td><td>9.3%</td><td class="ctx">Tasa similar entre fuentes</td></tr>
+        </tbody>
+      </table>
+      <div class="canc-insight">Las tasas de cancelación son similares entre Funcionario (8.9%) y Portal Paciente (9.8%) — no hay diferencia significativa por fuente de agendamiento.</div>
     </div>
   </div>
 
   <script>
     function showTab(n) {
-      document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === n));
-      document.querySelectorAll('.page').forEach((p, i) => p.classList.toggle('active', i === n));
+      document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+      document.querySelectorAll('.page').forEach((p,i) => p.classList.toggle('active', i===n));
     }
-    function filterTabla(esp) {
-      document.querySelectorAll('#prof-table tbody tr').forEach(tr => {
-        tr.style.display = (!esp || tr.dataset.esp === esp) ? '' : 'none';
+    function filterTabla(val, tipo) {
+      document.querySelectorAll('#det-table tbody tr').forEach(tr => {
+        const match = !val || tr.dataset[tipo] === val || tr.dataset[tipo].includes(val);
+        tr.style.display = match ? '' : 'none';
       });
     }
   </script>
