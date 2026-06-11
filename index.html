@@ -205,11 +205,15 @@
   <div class="page active" id="tab0">
     <div class="filter-row">
       <span class="filter-label">Período:</span>
-      <select class="filter-select"><option>Fecha específica</option></select>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label">Fecha:</span>
-      <span class="date-badge">12 jun 2026</span>
+      <select class="filter-select" id="periodo-select" onchange="toggleFecha(this.value)">
+        <option value="todos">Todos los datos</option>
+        <option value="fecha" selected>Fecha específica</option>
+        <option value="7dias">Últimos 7 días</option>
+        <option value="mes">Último mes</option>
+        <option value="rango">Rango personalizado</option>
+      </select>
+      <span class="filter-label" id="fecha-label">Fecha:</span>
+      <span class="date-badge" id="fecha-badge">12 jun 2026</span>
       <span class="citas-badge">335 citas</span>
     </div>
 
@@ -463,6 +467,11 @@
   </div>
 
   <script>
+    function toggleFecha(val) {
+      const show = val === 'fecha';
+      document.getElementById('fecha-label').style.display = show ? '' : 'none';
+      document.getElementById('fecha-badge').style.display = show ? '' : 'none';
+    }
     function showTab(n) {
       document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
       document.querySelectorAll('.page').forEach((p,i) => p.classList.toggle('active', i===n));
